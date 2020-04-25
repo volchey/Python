@@ -4,8 +4,7 @@ from State import *
 import functions
 
 class Astar():
-    def __init__(self, puzzle_size, is_debug = False):
-        self.puzzle_size = puzzle_size
+    def __init__(self, is_debug = False):
         self.opened = []
         self.closed = []
         self.is_debug = is_debug
@@ -32,33 +31,28 @@ class Astar():
     def markStateAsClosed(self, state):
         self.closed.append(state)
 
-    def processNeighbors(self, puzzle, state: State):
-        curr_index = state.index
-        indexes = state.getNeighborIndexes(self.puzzle_size)
+    def processNeighbors(self, state: State):
+        neighbors = state.getNeighborStates()
 
         if (self.is_debug):
             print("Neighbors:")
-            print(indexes)
+            string = ""
+            for i in neighbors:
+                string += str(i.puzzle.index) + ", "
+            print(string)
 
-        for neighbor in indexes:
+        for neighbor in neighbors:
             if neighbor in self.closed:
                 continue
             
-            puzzle_copy = puzzle.copy()
-            buf = puzzle_copy[neighbor]
-            puzzle_copy[neighbor] = puzzle_copy[curr_index]
-            puzzle_copy[curr_index] = buf
+            neighbor.steps_count = state.steps_count + 1
+            neighbor.heuristic_weight = functions.countHeuristicWeight(neighbor.puzzle.map)
 
-            new_state = State(neighbor, state)
-            
-            new_state.steps_count = state.steps_count + 1
-            new_state.heuristic_weight = functions.countHeuristicWeight(puzzle_copy)
+            # for i in self.opened:
+            #     if neighbor == i and new_state < i:
+            #         i = new_state
+            #         continue
 
-            for i in self.opened:
-                if new_state.index == i.index and new_state < i:
-                    i = new_state
-                    continue
-
-            self.opened.append(new_state)
+            self.opened.append(neighbor)
             
         # return None

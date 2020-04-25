@@ -30,8 +30,8 @@ def parse_map(puzzle_size, file):
             print('{}: {}'.format("incorrect puzzle map in row", line))
             exit(2)
     
-        if is_debug:
-            print(row)
+        # if is_debug:
+        #     print(row)
 
         puzzle = puzzle + row
 
