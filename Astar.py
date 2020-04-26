@@ -28,9 +28,6 @@ class Astar():
 
         return result
 
-    def markStateAsClosed(self, state):
-        self.closed.append(state)
-
     def processNeighbors(self, state: State):
         neighbors = state.getNeighborStates()
 
@@ -50,15 +47,20 @@ class Astar():
             neighbor.heuristic_weight = functions.countHeuristicWeight(neighbor.puzzle.map)
 
             is_already_opened = False
+
             for i in self.opened:
-                if neighbor.puzzle == i.puzzle and neighbor.steps_count < i.steps_count:
-                    i = neighbor
+                if neighbor == i and neighbor.steps_count < i.steps_count:
+                    i.parent = state
+                    i.steps_count = neighbor.steps_count
                     is_already_opened = True
+                    if self.is_debug:
+                        print("\nAlready opened:\n")
+                        print(i)
                     break
 
             if is_already_opened:
                 continue
 
             self.opened.append(neighbor)
-            
+
         # return None

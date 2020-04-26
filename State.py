@@ -36,6 +36,7 @@ class State():
     def getNeighborStates(self):
         index = self.puzzle.index
         curr_col, curr_row = self.puzzle.getIndexCoords(index)
+        # print("curr_column = {}, curr_row = {}".format(curr_col, curr_row))
         states = []
         
         left = index - 1

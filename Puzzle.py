@@ -26,6 +26,10 @@ class Puzzle():
         return None
 
     def getIndexCoords(self, index):
+        if index < 0:
+            index = self.size * self.size + index - 1
+        if index > (self.size * self.size - 1):
+            index = 0 + index
         row = int(index / self.size)
 
         column = index % self.size
