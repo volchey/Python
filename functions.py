@@ -3,7 +3,7 @@
 def countHeuristicWeight(puzzle):
     result = 0
     for index, value in enumerate(puzzle):
-        if index + 1 != value:
+        if index != value:
             result += 1
     return result
 

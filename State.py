@@ -17,7 +17,7 @@ class State():
     def __eq__(self, other):
         # if (other == None):
         #     return False
-        print("Equal operator called")
+        # print("Equal operator called")
         return self.puzzle == other.puzzle
 
     def __lt__(self, other):

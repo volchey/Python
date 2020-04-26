@@ -33,8 +33,8 @@ if __name__ == "__main__":
     if is_debug:
         print(puzzle)
         
-    for i in range(0, 10):
-    # while (astar.opened and not isFinished(puzzle)):
+    # for i in range(0, 20):
+    while (astar.opened and not isFinished(current_state.puzzle.map)):
         next_state = min(astar.opened)
     
         if is_debug:
@@ -47,6 +47,6 @@ if __name__ == "__main__":
 
         astar.opened.remove(current_state)
         
-        if is_debug:
-            print(puzzle)
+        # if is_debug:
+        #     print(puzzle)
 
