@@ -1,12 +1,13 @@
 #/usr/bin/python
 
+from Functions import *
 from State import *
-import functions
 
 class Astar():
-    def __init__(self, is_debug = False):
+    def __init__(self, func: Functions, is_debug = False):
         self.opened = []
         self.closed = []
+        self.func     = func
         self.is_debug = is_debug
 
     def __str__(self):
@@ -27,16 +28,37 @@ class Astar():
         result += "]"
 
         return result
+    
+    def search(self):
+        # for i in range(0, 40):
+        while (self.opened):
+            next_state = min(self.opened)
+
+            if self.func.isFinished(next_state.puzzle.map):
+                self.func.printFullPath(next_state)
+                print("FIIIIINNIIIISH ")
+                break
+        
+            self.opened.remove(next_state)
+            self.closed.append(next_state)
+            self.processNeighbors(next_state)
+
+            if self.is_debug:
+                print("Next State:")
+                print(next_state)
+                print("Opened:")
+                self.func.printStateList(self.opened)
+                print("Closed:")
+                self.func.printStateList(self.closed)
+
+            # current_state = next_state
+            
+            # if is_debug:
+            #     print(puzzle)
+
 
     def processNeighbors(self, state: State):
         neighbors = state.getNeighborStates()
-
-        # if (self.is_debug):
-        #     print("Neighbors:")
-        #     string = ""
-        #     for i in neighbors:
-        #         string += str(i.puzzle.index) + ", "
-        #     print(string)
 
         for neighbor in neighbors:
             # print(neighbor.puzzle.index)
@@ -44,7 +66,7 @@ class Astar():
                 continue
             
             neighbor.steps_count = state.steps_count + 1
-            neighbor.heuristic_weight = functions.countHeuristicWeight(neighbor.puzzle.map)
+            neighbor.heuristic_weight = self.func.countHeuristicWeight(neighbor.puzzle.map)
 
             is_already_opened = False
 
