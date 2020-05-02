@@ -1,5 +1,6 @@
 #/usr/bin/python
 
+import sys
 import parser
 from Functions import *
 from Astar import *
@@ -15,10 +16,13 @@ if __name__ == "__main__":
         print(e)
         exit(2)
 
+    if "-d" in sys.argv:
+        is_debug = True
+
     func = Functions(map_size, is_debug)
     puzzle = Puzzle(map, map_size)
 
-    current_state = State(puzzle, None)
+    current_state = State(func, puzzle, None)
 
     astar = Astar(func, is_debug)
     astar.opened.append(current_state)

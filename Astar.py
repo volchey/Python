@@ -30,12 +30,12 @@ class Astar():
         return result
     
     def search(self):
-        # for i in range(0, 40):
+        # for i in range(0, 20):
         while (self.opened):
             next_state = min(self.opened)
 
-            if self.func.isFinished(next_state.puzzle.map):
-                self.func.printFullPath(next_state)
+            if next_state.isFinished():
+                next_state.printFullPath()
                 print("FIIIIINNIIIISH ")
                 break
         
@@ -66,7 +66,7 @@ class Astar():
                 continue
             
             neighbor.steps_count = state.steps_count + 1
-            neighbor.heuristic_weight = self.func.countHeuristicWeight(neighbor.puzzle.map)
+            neighbor.countHeuristicWeight()
 
             is_already_opened = False
 

@@ -1,12 +1,13 @@
 #/usr/bin/python
 
-import State
-
 class Functions():
     def __init__(self, map_size, is_debug = False):
-        self.map_size = map_size
-        self.is_debug = is_debug
-        self.goal     = self.findGoalState()
+        self.map_size   = map_size
+        self.max_value  = self.map_size * self.map_size
+        self.is_debug   = is_debug
+        self.goal       = self.findGoalState()
+        self.map_coords = self.findMapCoords()
+        self.goal_hash  = hash(tuple(self.goal))
         
     def findGoalState(self):
         map_size = self.map_size
@@ -18,8 +19,7 @@ class Functions():
         x = -1
         y = 0 
         value = 0
-        max_value = map_size * map_size
-        while value < max_value - 1:
+        while value < self.max_value - 1:
             for i in range(0, map_size):
                 x += 1
                 value += 1
@@ -32,14 +32,14 @@ class Functions():
             for i in range(0, map_size):
                 x -= 1
                 value += 1
-                if (value == max_value):
+                if (value == self.max_value):
                     break
                 goal[y][x] = value
             map_size -= 1
             for i in range(0, map_size):
                 y -= 1
                 value += 1
-                if (value == max_value):
+                if (value == self.max_value):
                     break
                 goal[y][x] = value
         
@@ -53,23 +53,20 @@ class Functions():
             for x in y:
                 result.append(x)
 
-        return result
+        return result        
             
-    def countHeuristicWeight(self, puzzle):
-        result = 0
-        for index, value in enumerate(puzzle):
-            if self.goal[index] != value:
-                result += 1
+    def findMapCoords(self):
+        result = {}
+        x = 0
+        y = 0
+        for i in range(self.max_value):
+            result[i] = (x, y)
+            x += 1
+            if x % self.map_size == 0:
+                x = 0
+                y += 1
+            
         return result
-
-    # def heuristic(self, state):
-    #     x, y = state.puzzle.getIndexCoords(state.puzzle.index)
-    #     dx = abs(x - goal.x)
-    #     dy = abs(y - goal.y)
-    #     return (dx + dy)
-
-    def isFinished(self, puzzle):
-        return self.countHeuristicWeight(puzzle) == 0
 
     def printStateList(self, list):
         string = ""
@@ -77,11 +74,18 @@ class Functions():
             string += str(i.puzzle.index) + ", "
         print(string)
 
-    def printFullPath(self, state: State):
-        while True:
-            print(state)
-            if not state.parent:
-                break
-            print("^")
-            print("|")
-            state = state.parent
+    def getIndexCoords(self, index: int):
+        if index < 0 or index > (self.max_value - 1):
+            return (-1, -1)
+
+        return self.map_coords[index]
+
+    def getValueCoords(self, a_value: int):
+        if a_value < 0 or a_value > (self.max_value - 1):
+            return (-1, -1)
+
+        for index, value in enumerate(self.goal):
+            if value == a_value:
+                return self.map_coords[index]
+
+        return (-1, -1)

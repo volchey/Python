@@ -19,32 +19,30 @@ def get_puzzle_size(file):
     return 0
 
 def parse_map(puzzle_size, file):
-    puzzle = []
+    puzzle = ()
 
     for line in file:
         if is_comment(line):
             continue
 
-        row = []
-        str_row = line.split()
-        print(str_row)
-        for elem in str_row:
+        row = line.split()
+        row_int = []
+        print(row)
+        for elem in row:
             if is_comment(elem):
                 continue
-            row.append(int(elem))
+            row_int.append(int(elem))
+
         if (len(row) != puzzle_size):
             print('{}: {}'.format("incorrect puzzle map in row", line))
             exit(2)
-    
-        # if is_debug:
-        #     print(row)
 
-        puzzle = puzzle + row
+        puzzle += tuple(row_int)
 
     return puzzle
 
 def parse_puzzles():
-    if len(sys.argv) != 2:
+    if len(sys.argv) < 2:
         print("parser.py [filename]")
         exit(2)
 
