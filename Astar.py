@@ -1,13 +1,11 @@
 #/usr/bin/python
 
-from Functions import *
 from State import *
 
 class Astar():
-    def __init__(self, func: Functions, is_debug = False):
+    def __init__(self, is_debug = False):
         self.opened = []
         self.closed = []
-        self.func     = func
         self.is_debug = is_debug
 
     def __str__(self):
@@ -46,22 +44,12 @@ class Astar():
             if self.is_debug:
                 print("Next State:")
                 print(next_state)
-                print("Opened:")
-                self.func.printStateList(self.opened)
-                print("Closed:")
-                self.func.printStateList(self.closed)
-
-            # current_state = next_state
-            
-            # if is_debug:
-            #     print(puzzle)
 
 
     def processNeighbors(self, state: State):
         neighbors = state.getNeighborStates()
 
         for neighbor in neighbors:
-            # print(neighbor.puzzle.index)
             if neighbor in self.closed:
                 continue
             
@@ -75,14 +63,9 @@ class Astar():
                     i.parent = state
                     i.steps_count = neighbor.steps_count
                     is_already_opened = True
-                    if self.is_debug:
-                        print("\nAlready opened:\n")
-                        print(i)
                     break
 
             if is_already_opened:
                 continue
 
             self.opened.append(neighbor)
-
-        # return None

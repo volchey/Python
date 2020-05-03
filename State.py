@@ -58,7 +58,7 @@ class State():
         return states
 
     def countHeuristicWeight(self):
-        self.heuristic_weight = self.euclidianDistance()
+        self.heuristic_weight = self.manhattanDistance()
 
     def missedCount(self):
         result = 0

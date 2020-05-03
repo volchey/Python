@@ -34,8 +34,4 @@ class Puzzle():
                 value = self.map[a_index]
             new_list.append(value)
         
-        # map_copy = self.map
-        # buf = map_copy[index]
-        # map_copy[index] = map_copy.index(self.index)
-        # map_copy[self.index] = buf
         return Puzzle(tuple(new_list), self.size)

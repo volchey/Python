@@ -24,6 +24,6 @@ if __name__ == "__main__":
 
     current_state = State(func, puzzle, None)
 
-    astar = Astar(func, is_debug)
+    astar = Astar(is_debug)
     astar.opened.append(current_state)
     astar.search()
