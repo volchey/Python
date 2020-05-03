@@ -1,5 +1,6 @@
 #/usr/bin/python
 
+import math 
 from Functions import *
 from Puzzle import *
 
@@ -17,9 +18,6 @@ class State():
             self.puzzle.__str__(), self.steps_count, self.heuristic_weight)
 
     def __eq__(self, other):
-        # if (other == None):
-        #     return False
-        # print("Equal operator called")
         return self.puzzle == other.puzzle
 
     def __lt__(self, other):
@@ -35,12 +33,10 @@ class State():
     def getNeighborStates(self):
         index = self.puzzle.index
         curr_col, curr_row = self.func.getIndexCoords(index)
-        # print("curr_column = {}, curr_row = {}".format(curr_col, curr_row))
         states = []
         
         left = index - 1
         left_col, left_row = self.func.getIndexCoords(left)
-        # print("left_column = {}, left_row = {}".format(left_col, left_row))
         if (left_row == curr_row and left_col >= 0):
             states.append(self.createNewStateFromIndex(left))
         
@@ -62,7 +58,7 @@ class State():
         return states
 
     def countHeuristicWeight(self):
-        self.heuristic_weight = self.manhattanDistance()
+        self.heuristic_weight = self.euclidianDistance()
 
     def missedCount(self):
         result = 0
@@ -79,6 +75,16 @@ class State():
             dx = abs(x - goal_x)
             dy = abs(y - goal_y)
             result += dx + dy
+        return result
+
+    def euclidianDistance(self):
+        result = 0
+        for index, value in enumerate(self.puzzle.map):
+            x, y            = self.func.getIndexCoords(index)
+            goal_x, goal_y  = self.func.getValueCoords(value)
+            dx = abs(x - goal_x)
+            dy = abs(y - goal_y)
+            result += math.sqrt(dx * dx + dy * dy)
         return result
 
     def getWeight(self):
