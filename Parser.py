@@ -3,7 +3,7 @@
 import sys
 
 class Parser():
-    def __init(self, is_debug = False):
+    def __init__(self, is_debug = False):
         self.is_debug = is_debug
 
     def is_comment(self, line):

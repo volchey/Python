@@ -1,7 +1,7 @@
 #/usr/bin/python
 
 import sys
-import parser
+from Parser import *
 from Functions import *
 from Astar import *
 from State import *
@@ -10,14 +10,15 @@ from Puzzle import *
 is_debug = False
 
 if __name__ == "__main__":
+    if "-d" in sys.argv:
+        is_debug = True
+    
     try:
+        parser = Parser(is_debug)
         map, map_size = parser.parse_puzzles()
     except Exception as e:
         print(e)
         exit(2)
-
-    if "-d" in sys.argv:
-        is_debug = True
 
     func = Functions(map_size, is_debug)
     puzzle = Puzzle(map, map_size)
