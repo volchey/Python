@@ -1,5 +1,5 @@
 #/usr/bin/python
-
+import time
 import sys
 from Parser import *
 from Functions import *
@@ -10,6 +10,8 @@ from Puzzle import *
 is_debug = False
 
 if __name__ == "__main__":
+    st = time.time()
+
     if "-d" in sys.argv:
         is_debug = True
     
@@ -28,3 +30,5 @@ if __name__ == "__main__":
     astar = Astar(is_debug)
     astar.opened.append(current_state)
     astar.search()
+
+    print("----%.2f----" % (time.time() - st))
