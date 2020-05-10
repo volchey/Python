@@ -65,16 +65,12 @@ class Astar():
 
             neighbor.steps_count = state.steps_count + 1
 
-            is_already_opened = False
-
-            for i in self.opened:
-                if neighbor == i and neighbor.steps_count < i.steps_count:
-                    i.parent = state
-                    i.steps_count = neighbor.steps_count
-                    is_already_opened = True
-                    break
-
-            if is_already_opened:
+            if neighbor in self.opened:
+                i = self.opened.index(neighbor)
+                elem = self.opened[i]
+                if neighbor.steps_count < elem.steps_count:
+                    elem.parent = state
+                    elem.steps_count = neighbor.steps_count
                 continue
 
             neighbor.countHeuristicWeight()

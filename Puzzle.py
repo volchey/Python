@@ -4,7 +4,7 @@ class Puzzle():
     def __init__(self, map: tuple, size: int):
         self.map = map
         self.size = size
-        self.index = self.getIndex()
+        self.index = self.map.index(0)
         self.hash = hash(map)
 
     def __str__(self):
@@ -19,19 +19,9 @@ class Puzzle():
     def __eq__(self, value):
         return self.hash == value.hash
 
-    def getIndex(self) -> int:
-        for index, value in enumerate(self.map):
-            if (value == 0):
-                return index
-        return None
-
     def getMovedToIndex(self, a_index: int):
-        new_list = []
-        for i, value in enumerate(self.map):
-            if i == a_index:
-                value = 0
-            elif i == self.index:
-                value = self.map[a_index]
-            new_list.append(value)
-        
+        new_list = list(self.map)
+        new_list[a_index] = self.map[self.index]
+        new_list[self.index] = self.map[a_index]
+
         return Puzzle(tuple(new_list), self.size)

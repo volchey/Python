@@ -8,16 +8,16 @@ class Functions():
         self.goal       = self.findGoalState()
         self.map_coords = self.findMapCoords()
         self.goal_hash  = hash(tuple(self.goal))
-        
+
     def findGoalState(self):
         map_size = self.map_size
         goal = []
         for i in range(0, map_size):
             new = [0] * map_size
             goal.append(new)
-        
+
         x = -1
-        y = 0 
+        y = 0
         value = 0
         while value < self.max_value - 1:
             for i in range(0, map_size):
@@ -42,7 +42,7 @@ class Functions():
                 if (value == self.max_value):
                     break
                 goal[y][x] = value
-        
+
         if self.is_debug:
             print("Goal:")
             for i in goal:
@@ -53,8 +53,8 @@ class Functions():
             for x in y:
                 result.append(x)
 
-        return result        
-            
+        return result
+
     def findMapCoords(self):
         result = {}
         x = 0
@@ -65,7 +65,7 @@ class Functions():
             if x % self.map_size == 0:
                 x = 0
                 y += 1
-            
+
         return result
 
     def printStateList(self, list):
@@ -84,8 +84,5 @@ class Functions():
         if a_value < 0 or a_value > (self.max_value - 1):
             return (-1, -1)
 
-        for index, value in enumerate(self.goal):
-            if value == a_value:
-                return self.map_coords[index]
-
-        return (-1, -1)
+        i = self.goal.index(a_value)
+        return self.map_coords[i]

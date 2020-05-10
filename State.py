@@ -32,25 +32,17 @@ class State():
         curr_col, curr_row = self.func.getIndexCoords(index)
         states = []
 
-        left = index - 1
-        left_col, left_row = self.func.getIndexCoords(left)
-        if (left_row == curr_row and left_col >= 0):
-            states.append(self.createNewStateFromIndex(left))
+        if (curr_col - 1 >= 0):
+            states.append(self.createNewStateFromIndex(index - 1))
 
-        right = index + 1
-        right_col, right_row = self.func.getIndexCoords(right)
-        if (right_row == curr_row and right_col <= self.puzzle.size - 1):
-            states.append(self.createNewStateFromIndex(right))
+        if (curr_col + 1 <= self.puzzle.size - 1):
+            states.append(self.createNewStateFromIndex(index + 1))
 
-        up = index - self.puzzle.size
-        up_col, up_row = self.func.getIndexCoords(up)
-        if (up_col == curr_col and up_row >= 0):
-            states.append(self.createNewStateFromIndex(up))
+        if (curr_row - 1 >= 0):
+            states.append(self.createNewStateFromIndex(index - self.puzzle.size))
 
-        down = index + self.puzzle.size
-        down_col, down_row = self.func.getIndexCoords(down)
-        if (down_col == curr_col and down_row <= self.puzzle.size - 1):
-            states.append(self.createNewStateFromIndex(down))
+        if (curr_row + 1 <= self.puzzle.size - 1):
+            states.append(self.createNewStateFromIndex(index + self.puzzle.size))
 
         return states
 
