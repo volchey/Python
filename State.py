@@ -12,16 +12,18 @@ class State():
         self.is_debug           = is_debug
         self.steps_count        = 0
         self.heuristic_weight   = 0
+        self.f_weight           = 0
 
     def __str__(self):
         return "Puzzle:\n{}Steps count (g) = {}\nHeuristic weight (h) = {}".format(
             self.puzzle.__str__(), self.steps_count, self.heuristic_weight)
 
     def __eq__(self, other):
-        return self.puzzle == other.puzzle
+        return self.puzzle.hash == other.puzzle.hash
 
     def __lt__(self, other):
-        return self.getWeight() < other.getWeight()
+        # return self.getWeight() < other.getWeight()
+        return self.f_weight < other.f_weight
 
     def createNewStateFromIndex(self, index):
         new_puzzle = self.puzzle.getMovedToIndex(index)
@@ -48,6 +50,7 @@ class State():
 
     def countHeuristicWeight(self):
         self.heuristic_weight = self.manhattanDistance()
+        self.f_weight = self.getWeight()
 
     def missedCount(self):
         result = 0
