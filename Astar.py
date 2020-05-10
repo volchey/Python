@@ -60,8 +60,6 @@ class Astar():
         neighbors = state.getNeighborStates()
 
         for neighbor in neighbors:
-            # if neighbor in self.closed:
-            #     continue
             is_in_closed = False
             for close in self.closed:
                 if close.puzzle.hash == neighbor.puzzle.hash:
@@ -73,12 +71,17 @@ class Astar():
 
             neighbor.steps_count = state.steps_count + 1
 
-            if neighbor in self.opened:
-                i = self.opened.index(neighbor)
-                elem = self.opened[i]
-                if neighbor.steps_count < elem.steps_count:
-                    elem.parent = state
-                    elem.steps_count = neighbor.steps_count
+            is_already_opened = False
+
+            for i in self.opened:
+                if neighbor.puzzle.hash == i.puzzle.hash:
+                    is_already_opened = True
+                    if neighbor.steps_count < i.steps_count:
+                        i.parent = state
+                        i.steps_count = neighbor.steps_count
+                    break
+
+            if is_already_opened:
                 continue
 
             neighbor.countHeuristicWeight()
