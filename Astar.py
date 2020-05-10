@@ -61,6 +61,7 @@ class Astar():
                 if neighbor == i and neighbor.steps_count < i.steps_count:
                     i.parent = state
                     i.steps_count = neighbor.steps_count
+                    is_already_opened = True
                     break
 
             if is_already_opened:
