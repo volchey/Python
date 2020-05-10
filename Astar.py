@@ -26,7 +26,7 @@ class Astar():
         result += "]"
 
         return result
-
+    
     def search(self):
         # for i in range(0, 20):
         while (self.opened):
@@ -36,7 +36,7 @@ class Astar():
                 next_state.printFullPath()
                 print("FIIIIINNIIIISH ")
                 break
-
+        
             self.opened.remove(next_state)
             self.closed.append(next_state)
             self.processNeighbors(next_state)
@@ -52,16 +52,19 @@ class Astar():
         for neighbor in neighbors:
             if neighbor in self.closed:
                 continue
-
+            
             neighbor.steps_count = state.steps_count + 1
+            neighbor.countHeuristicWeight()
 
-            if neighbor not in self.opened:
-                neighbor.countHeuristicWeight()
-                self.opened.append(neighbor)
-                continue
+            is_already_opened = False
 
             for i in self.opened:
                 if neighbor == i and neighbor.steps_count < i.steps_count:
                     i.parent = state
                     i.steps_count = neighbor.steps_count
                     break
+
+            if is_already_opened:
+                continue
+
+            self.opened.append(neighbor)
