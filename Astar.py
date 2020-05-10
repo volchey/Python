@@ -48,7 +48,7 @@ class Astar():
                 print("FIIIIINNIIIISH ")
                 break
 
-            self.markAsClosed(next_state)
+            self.closed.append(next_state)
             self.processNeighbors(next_state)
 
             if self.is_debug:
