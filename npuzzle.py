@@ -14,7 +14,7 @@ if __name__ == "__main__":
 
     if "-d" in sys.argv:
         is_debug = True
-    
+
     try:
         parser = Parser(is_debug)
         map, map_size = parser.parse_puzzles()
@@ -31,4 +31,6 @@ if __name__ == "__main__":
     astar.opened.append(current_state)
     astar.search()
 
+
+    print("Opened states count = {}".format(len(astar.opened)))
     print("----%.2f----" % (time.time() - st))
