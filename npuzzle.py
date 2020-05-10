@@ -28,7 +28,7 @@ if __name__ == "__main__":
     current_state = State(func, puzzle, None)
 
     astar = Astar(is_debug)
-    astar.opened.append(current_state)
+    astar.markAsOpened(current_state)
     astar.search()
 
 

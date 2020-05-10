@@ -1,10 +1,12 @@
 #/usr/bin/python
 
+from heapq import heappush, heappop, heapify
 from State import *
 
 class Astar():
     def __init__(self, is_debug = False):
         self.opened = []
+        heapify(self.opened)
         self.closed = []
         self.is_debug = is_debug
 
@@ -27,18 +29,26 @@ class Astar():
 
         return result
 
+    def markAsOpened(self, state: State):
+        heappush(self.opened, state)
+        # self.opened.append(state)
+
+    def getMinFromOpened(self):
+        # state = min(self.opened)
+        # self.opened.remove(state)
+        # return state
+        return heappop(self.opened)
+
     def search(self):
-        # for i in range(0, 20):
         while (self.opened):
-            next_state = min(self.opened)
+            next_state = self.getMinFromOpened()
 
             if next_state.isFinished():
                 next_state.printFullPath()
                 print("FIIIIINNIIIISH ")
                 break
 
-            self.opened.remove(next_state)
-            self.closed.append(next_state)
+            self.markAsClosed(next_state)
             self.processNeighbors(next_state)
 
             if self.is_debug:
@@ -68,4 +78,5 @@ class Astar():
                 continue
 
             neighbor.countHeuristicWeight()
-            self.opened.append(neighbor)
+            self.markAsOpened(neighbor)
+            # self.opened.append(neighbor)
