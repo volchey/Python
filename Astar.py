@@ -60,7 +60,15 @@ class Astar():
         neighbors = state.getNeighborStates()
 
         for neighbor in neighbors:
-            if neighbor in self.closed:
+            # if neighbor in self.closed:
+            #     continue
+            is_in_closed = False
+            for close in self.closed:
+                if close.puzzle.hash == neighbor.puzzle.hash:
+                    is_in_closed = True
+                    break
+
+            if is_in_closed:
                 continue
 
             neighbor.steps_count = state.steps_count + 1
