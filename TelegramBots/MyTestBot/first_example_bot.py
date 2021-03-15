@@ -3,7 +3,12 @@ from telegram.ext import Updater
 from telegram.ext import CommandHandler
 from telegram.ext import MessageHandler, Filters
 from telegram.ext import InlineQueryHandler
-from telegram import InlineQueryResultArticle, InputTextMessageContent
+from telegram import (
+    InlineQueryResultArticle,
+    InputTextMessageContent,
+    KeyboardButton,
+    KeyboardButtonPollType
+}
 
 def start(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="I'm a bot, please talk to me!")
@@ -60,6 +65,7 @@ dispatcher.add_handler(start_handler)
 
 updater.start_polling()
 
+button = [[KeyboardButton("start!", request_poll=KeyboardButtonPollType())]]
 
 revert_handler = CommandHandler('revert', revert)
 dispatcher.add_handler(revert_handler)
