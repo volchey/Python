@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <style>
+
+        </style>
+
+        <script>
+
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Hour</th>
+                        <th scope="col">Monday</th>
+                        <th scope="col">Tuesday</th>
+                        <th scope="col">Wednesday</th>
+                        <th scope="col">Thursday</th>
+                        <th scope="col">Friday</th>
+                        <th scope="col">Saturday</th>
+                        <th scope="col">Sunday</th>
+                    </tr>
+                </thead>
+                {% for item in range %}
+                <tr>
+                    <td>{{ item }}:00</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+            </table>
+            <a class="button" href="{% url 'create-event' %}">Create Event</a>
+        </div>
+    </body>
+</html>
