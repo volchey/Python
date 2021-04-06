@@ -16,24 +16,27 @@
                     <tr>
                         <th scope="col">Hour</th>
                         {% for item in days %}
-                          <th scope="col">{{ item }}</th>
+                          <th scope="col">{{ item|date:'l d/m' }}</th>
                         {% endfor %}
                     </tr>
                 </thead>
-                {% for item in range %}
+                {% for key, values in hours %}
                     <tr>
-                        <td>{{ item }}:00</td>
+                        <td>{{ key }}</td>
+                        {% for hour in values %}
+                            <td> {{ hour }} </td>
+                        {% endfor %}
+                        <!-- <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
-                        <td></td>
+                        <td></td> -->
                     </tr>
                 {% endfor %}
             </table>
-            <a class="button" href="{% url 'create-event' %}">Create Event</a>
+            <a class="button" href="{% url 'admin:events_event_add' %}">Create Event</a>
         </div>
     </body>
 </html>
