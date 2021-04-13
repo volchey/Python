@@ -30,6 +30,7 @@ class Event(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     coordinator = models.ForeignKey(Coordinator, on_delete=models.CASCADE)
+    color = models.IntegerField(default=13622955)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     starttime = models.DateTimeField(default=None)

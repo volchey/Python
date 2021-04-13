@@ -3,39 +3,127 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <style>
 
+            .container{
+                max-width: 70%;
+            }
+
+            .date{
+                margin: 1% 0 1% 0;
+                text-decoration: underline;
+                font-size: large;
+                background-color: #e8e4b6;
+                border-radius: 6px;
+                text-align: center;
+                padding: 2;
+            }
+
+            .b-container{
+                width: 40%;
+                background-color: #c3e0a8;
+                font-size: 20px;
+                border-radius: 20px;
+                text-align: center;
+            }
+
+            .popup {
+                /* width: 100%; */
+            }
+
+            .popup .popuptext {
+                padding: 8px;
+                background-color: rgb(206 227 232);
+                /* text-align: center; */
+                border-radius: 5px;
+                box-shadow: 0px 0px 10px #000;
+                /* margin-top: 1% */
+                display: inline;
+                float: right;
+                position: fixed;
+                margin-left: 1%;
+            }
+            .popuptext {
+                overflow: auto;
+            }
+
+            .b-popup{
+                width:100%;
+                min-height:100%;
+                background-color: rgba(0,0,0,0.5);
+                overflow:hidden;
+                position:fixed;
+                top:0px;
+            }
+            .b-popup .b-popup-content{
+                margin:40px auto 0px auto;
+                width:100px;
+                height: 40px;
+                padding:10px;
+                background-color: #b37373;
+                border-radius:5px;
+                box-shadow: 0px 0px 10px #000;
+            }
+
+            /* Add animation (fade in the popup) */
+            @-webkit-keyframes fadeIn {
+                from {opacity: 0;}
+                to {opacity: 1;}
+            }
+
+            @keyframes fadeIn {
+                from {opacity: 0;}
+                to {opacity:1 ;}
+            }
+
+            .flex-container {
+                display: flex;
+                padding: 1%;
+            }
+
         </style>
-
+        <script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
         <script>
-
+            $(document).ready(function(){
+                $(".popup").hide();
+            });
+            function PopUpShow(id){
+                $("#popup" + id).show();
+            }
+            function PopUpHide(id){
+                $("#popup" + id).hide();
+            }
         </script>
     </head>
     <body>
         <div class="container">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Hour</th>
-                        {% for item in days %}
-                          <th scope="col">{{ item|date:'l d/m' }}</th>
-                        {% endfor %}
-                    </tr>
-                </thead>
-                {% for key, values in hours %}
-                    <tr>
-                        <td>{{ key }}</td>
-                        {% for hour in values %}
-                            <td> {{ hour }} </td>
-                        {% endfor %}
-                        <!-- <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td> -->
-                    </tr>
-                {% endfor %}
-            </table>
+            {% for date, events in days.items %}
+                <div class="date">
+                    <b> {{ date|date:"l F d-m-Y" }} </b>
+                </div>
+                <ul>
+                    {% for event in events %}
+                    <div class="flex-container">
+                        <div class='b-container' style="background-color: {{ event.color }};" onclick="PopUpShow({{ event.id }})">
+                            <li>
+                                {{ event.title }} <br/>
+                                {{ event.starttime|date:"y-m-d  G:i"  }} - {{ event.endtime|date:"y-m-d  G:i" }}
+                            </li>
+                        </div>
+                        <div class="popup " id="popup{{ event.id }}">
+                            <div class="popuptext">
+                                <a href="{% url 'admin:events_event_change' event.id %}">Edit Event</a>&nbsp;&nbsp;
+                                <a href="{% url 'admin:events_event_delete' event.id %}">Delete Event</a>
+                                <a style="float: right;" href="javascript:PopUpHide({{ event.id }})">&#10006;</a> <br/>
+                                Location:&nbsp;{{ event.location.address }} <br/>
+                                Customer:&nbsp;{{ event.customer.name }}&nbsp;{{ event.customer.surname }} <br/>
+                                Coordinator:&nbsp;{{ event.coordinator.name }}&nbsp;{{ event.coordinator.surname }} <br/>
+                                Subject:&nbsp;{{ event.subject.description }} <br/>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+                </ul>
+            {% endfor %}
             <a class="button" href="{% url 'admin:events_event_add' %}">Create Event</a>
         </div>
     </body>
