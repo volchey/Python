@@ -25,12 +25,8 @@
                 width: 40%;
                 background-color: #c3e0a8;
                 font-size: 20px;
-                border-radius: 20px;
+                border-radius: 12px;
                 text-align: center;
-            }
-
-            .popup {
-                /* width: 100%; */
             }
 
             .popup .popuptext {
@@ -67,20 +63,18 @@
                 box-shadow: 0px 0px 10px #000;
             }
 
-            /* Add animation (fade in the popup) */
-            @-webkit-keyframes fadeIn {
-                from {opacity: 0;}
-                to {opacity: 1;}
-            }
-
-            @keyframes fadeIn {
-                from {opacity: 0;}
-                to {opacity:1 ;}
-            }
-
             .flex-container {
                 display: flex;
                 padding: 1%;
+            }
+
+            .leftcol {
+                position: absolute;
+                width: 210px;
+            }
+
+            .rightcol {
+                margin-left: 250px;
             }
 
         </style>
@@ -88,16 +82,15 @@
             $(document).ready(function(){
                 $(".popup").hide();
                 $('input[name="daterange"]').daterangepicker({
-                        opens: 'left'
+                    opens: 'right',
                     }, function(start, end, label) {
-                        // var url = window.location.href;
                         console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
                         location="?start_date=" + start.format('YYYY-MM-DD') + "&end_date=" + end.format('YYYY-MM-DD')
-                        // window.location.href = url;
                     });
-            });
-            function PopUpShow(id){
-                $("#popup" + id).show();
+                });
+                showCalendar.daterangepicker
+                function PopUpShow(id){
+                    $("#popup" + id).show();
             }
             function PopUpHide(id){
                 $("#popup" + id).hide();
@@ -105,39 +98,52 @@
         </script>
     </head>
     <body>
-        <form>
-            <input type="text" name="daterange"/>
-        </form>
         <div class="container">
-            {% for date, events in days.items %}
-                <div class="date">
-                    <b> {{ date|date:"l F d-m-Y" }} </b>
+            <form class="leftcol">
+                <input class="form-control" type="text" name="daterange"/>
+                <br/>
+                <p>Filters</p>
+                <hr/>
+                {% for subject in subjects %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="{{subject}}" value="{{subject}}" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        {{subject}}
+                    </label>
                 </div>
-                <ul>
-                    {% for event in events %}
-                    <div class="flex-container">
-                        <div class='b-container' style="background-color: {{ event.color }};" onclick="PopUpShow({{ event.id }})">
-                            <li>
-                                {{ event.title }} <br/>
-                                {{ event.starttime|date:"y-m-d  G:i"  }} - {{ event.endtime|date:"y-m-d  G:i" }}
-                            </li>
-                        </div>
-                        <div class="popup " id="popup{{ event.id }}">
-                            <div class="popuptext">
-                                <a href="{% url 'admin:events_event_change' event.id %}">Edit Event</a>&nbsp;&nbsp;
-                                <a href="{% url 'admin:events_event_delete' event.id %}">Delete Event</a>
-                                <a style="float: right;" href="javascript:PopUpHide({{ event.id }})">&#10006;</a> <br/>
-                                Location:&nbsp;{{ event.location.address }} <br/>
-                                Customer:&nbsp;{{ event.customer.name }}&nbsp;{{ event.customer.surname }} <br/>
-                                Coordinator:&nbsp;{{ event.coordinator.name }}&nbsp;{{ event.coordinator.surname }} <br/>
-                                Subject:&nbsp;{{ event.subject.description }} <br/>
+                {% endfor %}
+            </form>
+                <div class=rightcol>
+                {% for date, events in days.items %}
+                    <div class="date">
+                        <b> {{ date|date:"l F d-m-Y" }} </b>
+                    </div>
+                    <ul>
+                        {% for event in events %}
+                        <div class="flex-container">
+                            <div class='b-container' style="background-color: {{ event.color }};" onclick="PopUpShow({{ event.id }})">
+                                <li>
+                                    {{ event.title }} <br/>
+                                    {{ event.starttime|date:"y-m-d  G:i"  }} - {{ event.endtime|date:"y-m-d  G:i" }}
+                                </li>
+                            </div>
+                            <div class="popup " id="popup{{ event.id }}">
+                                <div class="popuptext">
+                                    <a href="{% url 'admin:events_event_change' event.id %}">Edit Event</a>&nbsp;&nbsp;
+                                    <a href="{% url 'admin:events_event_delete' event.id %}">Delete Event</a>
+                                    <a style="float: right;" href="javascript:PopUpHide({{ event.id }})">&#10006;</a> <br/>
+                                    Location:&nbsp;{{ event.location.address }} <br/>
+                                    Customer:&nbsp;{{ event.customer.name }}&nbsp;{{ event.customer.surname }} <br/>
+                                    Coordinator:&nbsp;{{ event.coordinator.name }}&nbsp;{{ event.coordinator.surname }} <br/>
+                                    Subject:&nbsp;{{ event.subject.description }} <br/>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    {% endfor %}
-                </ul>
-            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+                </div>
             <a class="button" href="{% url 'admin:events_event_add' %}">Create Event</a>
         </div>
     </body>
