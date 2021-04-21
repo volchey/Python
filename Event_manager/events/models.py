@@ -19,6 +19,7 @@ class Coordinator(models.Model):
     phone = models.CharField(max_length=16)
 
 class Subject(models.Model):
+    id = models.AutoField(primary_key=True)
     description = models.CharField(max_length=500)
 
 class TargetAudience(models.Model):

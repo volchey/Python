@@ -1,40 +1,45 @@
 from django.shortcuts import render
 from datetime import date, datetime, timedelta, time
 from django.utils import timezone
-from events.models import Event
+from events.models import Event, Subject
 from collections import defaultdict
 from django.views.generic.edit import CreateView
 
-def daterange(start_date, end_date):
+def daterange_gen(start_date, end_date):
     for n in range(int((end_date - start_date).days)):
         yield start_date + timedelta(n)
 
 def calendar(request):
     now = timezone.now()
 
-    start_date_str = request.GET.get('start_date', '')
-    end_date_str = request.GET.get('end_date', '')
+    daterange = request.POST.get('daterange')
 
-    start_date = datetime.strptime(start_date_str, '%Y-%m-%d') if start_date_str else now
-    end_date = datetime.strptime(end_date_str, '%Y-%m-%d') if end_date_str else now + timedelta(days=7)
+    print(daterange)
 
-    all_subjects = Event.objects.filter(starttime__range=[start_date, end_date]).values_list('subject').distinct()
+    start_end_range = daterange.split(' - ', 1) if daterange else list()
+
+    start_date_str = start_end_range[0] if start_end_range else ''
+    end_date_str = start_end_range[1] if start_end_range else ''
+
+    start_date = datetime.strptime(start_date_str, '%m/%d/%Y') if start_date_str else now
+    end_date = datetime.strptime(end_date_str, '%m/%d/%Y') if end_date_str else now + timedelta(days=7)
+
+    print(start_date, end_date)
+    all_subjects_ids = Event.objects.filter(starttime__range=[start_date, end_date]).values_list('subject', flat=True).distinct()
+
+    all_subjects = Subject.objects.filter(id__in=all_subjects_ids)
 
     print(all_subjects)
 
     days = dict()
-    subjects = set()
-    for curr_day in daterange(start_date, end_date):
+    for curr_day in daterange_gen(start_date, end_date):
         day_min = datetime.combine(curr_day, time.min)
         day_max = datetime.combine(curr_day, time.max)
         curr_events = Event.objects.filter(starttime__range=[day_min, day_max]).order_by('starttime')
 
         days[curr_day] = curr_events
 
-        for it_event in curr_events:
-            subjects.add(it_event.subject.description)
-
-    return render(request, 'events/calendar.html', {'days': days, 'start_date': start_date, 'end_date': end_date, 'subjects': subjects})
+    return render(request, 'events/calendar.html', {'days': days, 'start_date': start_date, 'end_date': end_date, 'subjects': all_subjects})
 
 class EventCreate(CreateView):
     model = Event

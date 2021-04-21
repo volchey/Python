@@ -82,15 +82,22 @@
             $(document).ready(function(){
                 $(".popup").hide();
                 $('input[name="daterange"]').daterangepicker({
+                    autoUpdateInput: false,
                     opens: 'right',
-                    }, function(start, end, label) {
-                        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-                        location="?start_date=" + start.format('YYYY-MM-DD') + "&end_date=" + end.format('YYYY-MM-DD')
-                    });
                 });
-                showCalendar.daterangepicker
-                function PopUpShow(id){
-                    $("#popup" + id).show();
+                $('input[name="daterange"]').on('apply.daterangepicker', function(ev, picker) {
+                    $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+                    $('#left_form').submit();
+                });
+
+                $('input[name="daterange"]').on('cancel.daterangepicker', function(ev, picker) {
+                    $(this).val('');
+                    $('#left_form').submit();
+                });
+
+            });
+            function PopUpShow(id){
+                $("#popup" + id).show();
             }
             function PopUpHide(id){
                 $("#popup" + id).hide();
@@ -99,21 +106,23 @@
     </head>
     <body>
         <div class="container">
-            <form class="leftcol">
-                <input class="form-control" type="text" name="daterange"/>
+            <form class="leftcol" action="/" method="POST" id="left_form">{% csrf_token %}
+                <label for="form-check-label">Pick your date range</label>
+                <input class="form-control" type="text" name="daterange" autocomplete="off" value="{{request.POST.daterange}}"/>
                 <br/>
                 <p>Filters</p>
                 <hr/>
                 {% for subject in subjects %}
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="{{subject}}" value="{{subject}}" id="flexCheckDefault">
+                    <input class="form-check-input" type="checkbox" name="{{subject.description}}" value="{{subject.id}}" id="flexCheckDefault" onchange="$('#left_form').submit();">
                     <label class="form-check-label" for="flexCheckDefault">
-                        {{subject}}
+                        {{subject.description}}
                     </label>
                 </div>
                 {% endfor %}
+                <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
             </form>
-                <div class=rightcol>
+                <div class="rightcol">
                 {% for date, events in days.items %}
                     <div class="date">
                         <b> {{ date|date:"l F d-m-Y" }} </b>
@@ -124,7 +133,7 @@
                             <div class='b-container' style="background-color: {{ event.color }};" onclick="PopUpShow({{ event.id }})">
                                 <li>
                                     {{ event.title }} <br/>
-                                    {{ event.starttime|date:"y-m-d  G:i"  }} - {{ event.endtime|date:"y-m-d  G:i" }}
+                                    {{ event.starttime|date:"G:i"  }} - {{ event.endtime|date:"G:i" }}
                                 </li>
                             </div>
                             <div class="popup " id="popup{{ event.id }}">
