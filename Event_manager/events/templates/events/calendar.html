@@ -114,7 +114,10 @@
                 <hr/>
                 {% for subject in subjects %}
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="{{subject.description}}" value="{{subject.id}}" id="flexCheckDefault" onchange="$('#left_form').submit();">
+                    <input type="hidden" name="{{subject.description}}" value="0">
+                    <input class="form-check-input"
+                        {% if subject.enabled %} checked {% endif %}
+                        type="checkbox" name="{{subject.description}}" value="1" id="flexCheckDefault" onchange="$('#left_form').submit();">
                     <label class="form-check-label" for="flexCheckDefault">
                         {{subject.description}}
                     </label>
