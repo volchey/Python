@@ -1,12 +1,12 @@
 from django.shortcuts import render
 from datetime import date, datetime, timedelta, time
 from django.utils import timezone
-from events.models import Event, Subject
+from events.models import Event, Subject, Location
 from collections import defaultdict
 from django.views.generic.edit import CreateView
 
 def daterange_gen(start_date, end_date):
-    for n in range(int((end_date - start_date).days)):
+    for n in range(int((end_date - start_date).days) + 1):
         yield start_date + timedelta(n)
 
 def calendar(request):
@@ -28,7 +28,6 @@ def calendar(request):
     all_subjects_ids = Event.objects.filter(starttime__range=[start_date, end_date]).values_list('subject', flat=True).distinct()
 
     all_subjects = Subject.objects.filter(id__in=all_subjects_ids)
-    print(all_subjects)
 
     enabled_subjects_ids = set()
     for it_subject in all_subjects:
@@ -37,16 +36,33 @@ def calendar(request):
             it_subject.enabled = True
             enabled_subjects_ids.add(it_subject.id)
 
+    all_location_ids = Event.objects.filter(starttime__range=[start_date, end_date]).values_list('location', flat=True).distinct()
+
+    all_locations = Location.objects.filter(id__in=all_location_ids)
+
+    enabled_location_ids = set()
+    for it_location in all_locations:
+        it_location.enabled = False
+        if request.POST.get(it_location.name) != '0':
+            it_location.enabled = True
+            enabled_location_ids.add(it_location.id)
+
     days = dict()
     for curr_day in daterange_gen(start_date, end_date):
         day_min = datetime.combine(curr_day, time.min)
         day_max = datetime.combine(curr_day, time.max)
-        curr_events = Event.objects.filter(starttime__range=[day_min, day_max], subject__id__in=enabled_subjects_ids
+        curr_events = Event.objects.filter(
+            starttime__range=[day_min, day_max],
+            subject__id__in=enabled_subjects_ids,
+            location__id__in=enabled_location_ids
             ).order_by('starttime')
 
         days[curr_day] = curr_events
 
-    return render(request, 'events/calendar.html', {'days': days, 'start_date': start_date, 'end_date': end_date, 'subjects': all_subjects})
+    return render(request, 'events/calendar.html', {
+        'days': days, 'start_date': start_date, 'end_date': end_date,
+        'subjects': all_subjects,
+        'locations': all_locations})
 
 class EventCreate(CreateView):
     model = Event

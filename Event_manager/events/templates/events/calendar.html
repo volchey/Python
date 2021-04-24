@@ -110,7 +110,7 @@
                 <label for="form-check-label">Pick your date range</label>
                 <input class="form-control" type="text" name="daterange" autocomplete="off" value="{{request.POST.daterange}}"/>
                 <br/>
-                <p>Filters</p>
+                <p>Subjects</p>
                 <hr/>
                 {% for subject in subjects %}
                 <div class="form-check">
@@ -123,7 +123,20 @@
                     </label>
                 </div>
                 {% endfor %}
-                <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+                <hr/>
+                <p>Location</p>
+                <hr/>
+                {% for location in locations %}
+                <div class="form-check">
+                    <input type="hidden" name="{{location.name}}" value="0">
+                    <input class="form-check-input"
+                        {% if location.enabled %} checked {% endif %}
+                        type="checkbox" name="{{location.name}}" value="1" id="flexCheckDefault" onchange="$('#left_form').submit();">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        {{location.name}}
+                    </label>
+                </div>
+                {% endfor %}
             </form>
                 <div class="rightcol">
                 {% for date, events in days.items %}
