@@ -13,12 +13,12 @@
 
             .date{
                 margin: 1% 0 1% 0;
-                text-decoration: underline;
                 font-size: large;
                 background-color: #e8e4b6;
                 border-radius: 6px;
                 text-align: center;
                 padding: 2;
+                cursor: pointer;
             }
 
             .b-container{
@@ -46,10 +46,15 @@
             .flex-container {
                 display: flex;
                 padding: 1%;
+                opacity: 1;
+                transition: opacity 1s;
             }
 
+            .flex-container.hide {
+                opacity: 0;
+            }
             .leftcol {
-                position: absolute;
+                position: fixed;
                 width: 210px;
             }
 
@@ -74,6 +79,20 @@
                     $('#left_form').submit();
                 });
 
+                [].forEach.call($(".record"),function(el){
+                    el.querySelector('div').addEventListener('click', event => {
+                        ul_elem = el.querySelector('ul');
+                        date_elem = el.querySelector('div');
+                        console.log(date_elem);
+                        if (ul_elem.style.display === "none") {
+                            ul_elem.style.display = "block";
+                            date_elem.innerHTML = date_elem.innerHTML.replace("▲","▼");
+                        } else {
+                            ul_elem.style.display = "none";
+                            date_elem.innerHTML = date_elem.innerHTML.replace("▼","▲");
+                        }
+                    })
+                });
             });
             function PopUpShow(id){
                 $("#popup" + id).show();
@@ -81,6 +100,7 @@
             function PopUpHide(id){
                 $("#popup" + id).hide();
             }
+
         </script>
     </head>
     <body>
@@ -119,8 +139,9 @@
             </form>
                 <div class="rightcol">
                 {% for date, events in days.items %}
+                <div class="record">
                     <div class="date">
-                        <b> {{ date|date:"l F d-m-Y" }} </b>
+                        <b style="text-decoration: underline;"> {{ date|date:"l F d-m-Y" }} </b> &nbsp; ▼
                     </div>
                     <ul>
                         {% for event in events %}
@@ -146,6 +167,7 @@
 
                         {% endfor %}
                     </ul>
+                </div>
                 {% endfor %}
                 </div>
             <a class="button" href="{% url 'admin:events_event_add' %}">Create Event</a>
