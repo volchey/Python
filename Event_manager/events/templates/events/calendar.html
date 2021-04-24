@@ -32,35 +32,15 @@
             .popup .popuptext {
                 padding: 8px;
                 background-color: rgb(206 227 232);
-                /* text-align: center; */
                 border-radius: 5px;
                 box-shadow: 0px 0px 10px #000;
-                /* margin-top: 1% */
                 display: inline;
                 float: right;
-                position: fixed;
+                position: absolute;
                 margin-left: 1%;
             }
             .popuptext {
                 overflow: auto;
-            }
-
-            .b-popup{
-                width:100%;
-                min-height:100%;
-                background-color: rgba(0,0,0,0.5);
-                overflow:hidden;
-                position:fixed;
-                top:0px;
-            }
-            .b-popup .b-popup-content{
-                margin:40px auto 0px auto;
-                width:100px;
-                height: 40px;
-                padding:10px;
-                background-color: #b37373;
-                border-radius:5px;
-                box-shadow: 0px 0px 10px #000;
             }
 
             .flex-container {
@@ -80,7 +60,6 @@
         </style>
         <script>
             $(document).ready(function(){
-                $(".popup").hide();
                 $('input[name="daterange"]').daterangepicker({
                     autoUpdateInput: false,
                     opens: 'right',
@@ -152,7 +131,7 @@
                                     {{ event.starttime|date:"G:i"  }} - {{ event.endtime|date:"G:i" }}
                                 </li>
                             </div>
-                            <div class="popup " id="popup{{ event.id }}">
+                            <div class="popup " id="popup{{ event.id }}" style="display: none;">
                                 <div class="popuptext">
                                     <a href="{% url 'admin:events_event_change' event.id %}">Edit Event</a>&nbsp;&nbsp;
                                     <a href="{% url 'admin:events_event_delete' event.id %}">Delete Event</a>
