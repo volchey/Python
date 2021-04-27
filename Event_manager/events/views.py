@@ -12,7 +12,7 @@ def daterange_gen(start_date, end_date):
 def calendar(request):
     now = timezone.now()
 
-    daterange = request.POST.get('daterange')
+    daterange = request.GET.get('daterange')
 
     print(daterange)
 
@@ -32,7 +32,7 @@ def calendar(request):
     enabled_subjects_ids = set()
     for it_subject in all_subjects:
         it_subject.enabled = False
-        if request.POST.get(it_subject.description) != '0':
+        if request.GET.get(it_subject.description) != '0':
             it_subject.enabled = True
             enabled_subjects_ids.add(it_subject.id)
 
@@ -43,7 +43,7 @@ def calendar(request):
     enabled_location_ids = set()
     for it_location in all_locations:
         it_location.enabled = False
-        if request.POST.get(it_location.name) != '0':
+        if request.GET.get(it_location.name) != '0':
             it_location.enabled = True
             enabled_location_ids.add(it_location.id)
 

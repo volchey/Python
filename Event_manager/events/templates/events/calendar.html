@@ -46,13 +46,8 @@
             .flex-container {
                 display: flex;
                 padding: 1%;
-                opacity: 1;
-                transition: opacity 1s;
             }
 
-            .flex-container.hide {
-                opacity: 0;
-            }
             .leftcol {
                 position: fixed;
                 width: 210px;
@@ -105,9 +100,9 @@
     </head>
     <body>
         <div class="container">
-            <form class="leftcol" action="/" method="POST" id="left_form">{% csrf_token %}
+            <form class="leftcol" action="/" method="GET" id="left_form">
                 <label for="form-check-label">Pick your date range</label>
-                <input class="form-control" type="text" name="daterange" autocomplete="off" value="{{request.POST.daterange}}"/>
+                <input class="form-control" type="text" name="daterange" autocomplete="off" value="{{request.GET.daterange}}"/>
                 <br/>
                 <p>Subjects</p>
                 <hr/>
@@ -136,8 +131,11 @@
                     </label>
                 </div>
                 {% endfor %}
+                <br />
+                <hr/>
+                <a class="button" href="{% url 'create-event' %}">Create Event</a>
             </form>
-                <div class="rightcol">
+            <div class="rightcol">
                 {% for date, events in days.items %}
                 <div class="record">
                     <div class="date">
@@ -169,8 +167,7 @@
                     </ul>
                 </div>
                 {% endfor %}
-                </div>
-            <a class="button" href="{% url 'admin:events_event_add' %}">Create Event</a>
+            </div>
         </div>
     </body>
 </html>
