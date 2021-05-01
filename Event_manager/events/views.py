@@ -59,11 +59,12 @@ def calendar(request):
 
         days[curr_day] = curr_events
 
-    return render(request, 'events/calendar.html', {
+    return render(request, 'calendar.html', {
         'days': days, 'start_date': start_date, 'end_date': end_date,
         'subjects': all_subjects,
         'locations': all_locations})
 
 class EventCreate(CreateView):
+    template_name = 'event_form.html'
     model = Event
     fields = '__all__'
