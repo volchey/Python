@@ -1,9 +1,11 @@
+from django import forms
 from django.shortcuts import render
 from datetime import date, datetime, timedelta, time
 from django.utils import timezone
 from events.models import Event, Subject, Location
 from collections import defaultdict
 from django.views.generic.edit import CreateView
+from django.forms import ModelForm
 
 def daterange_gen(start_date, end_date):
     for n in range(int((end_date - start_date).days) + 1):

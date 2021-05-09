@@ -10,7 +10,18 @@
 	    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
         <style>
             .container{
-                max-width: 70%;
+                max-width: 75%;
+            }
+            #header {
+                width: auto;
+                height: auto;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px 40px;
+                background: #417690;
+                color: #ffc;
+                overflow: hidden;
             }
         </style>
 
@@ -25,6 +36,12 @@
 
 	<body>
         <div class="container">
+            <div id="header">
+                <div id="branding">
+                    <h1 id="site-name">Event Manager</h1>
+                </div>
+                <a class="btn btn-dark" href="{% url 'admin:index' %}">Administration</a>
+            </div>
             {% block main %}
             {% endblock %}
         </div>

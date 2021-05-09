@@ -1,13 +1,44 @@
 {% extends 'base.html' %}
 
+{% block extra_styles %}
+    <style>
+        img {
+            width: 2.5%;
+        }
+
+    </style>
+{% endblock %}
+
+{% block extra_scripts %}
+    <script>
+        $(document).ready(function(){
+            $("input").each(function() {
+                $(this).addClass('form-control');
+            });
+            $("select").each(function() {
+                $(this).addClass('form-control');
+            });
+        });
+    </script>
+{% endblock %}
+
+
 {% block main %}
 <form method="post">{% csrf_token %}
     {% for field in form %}
-        <div class="fieldWrapper">
+        <div class="form-group row">
             {{ field.errors }}
-            {{ field.label_tag }}: {{ field }}
+            {{ field.label_tag }}
+            <div class="col-sm-10">
+                {{ field }}
+                {% if field.field.widget.input_type == 'select' %}
+                    <img src="http://www.clker.com/cliparts/Z/R/z/s/i/j/plus-sign-hi.png"
+                    alt="Add" title="Add another {{field.name}}">
+                {% endif %}
+            </div>
         </div>
     {% endfor %}
-    <p><input type="submit" value="Save" /></p>
+    <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+
 {% endblock %}
